@@ -96,6 +96,9 @@ Begin VB.MDIForm zMain
       Begin VB.Menu miInformeZeta 
          Caption         =   "INFORME ZETA"
       End
+      Begin VB.Menu miInformeTotalesXDNI 
+         Caption         =   "INFORME TOTALES X DNI"
+      End
    End
    Begin VB.Menu mListados 
       Caption         =   "LISTADOS"
@@ -138,6 +141,12 @@ Private Sub miInformeExcel_Click()
 
     InformeExcel.Show
 
+End Sub
+
+Private Sub miInformeTotalesXDNI_Click()
+
+    informeTotalesXDNI.Show
+    
 End Sub
 
 Private Sub miInformeTXT_Click()

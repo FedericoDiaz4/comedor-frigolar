@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
-Begin VB.Form InformeExcel 
+Begin VB.Form informeTotalesXDNI 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Informe Excel"
    ClientHeight    =   1560
@@ -36,7 +36,7 @@ Begin VB.Form InformeExcel
       EndProperty
       Height          =   615
       Left            =   3480
-      Picture         =   "informeExcel.frx":0000
+      Picture         =   "informeTotalesXDNI.frx":0000
       Style           =   1  'Graphical
       TabIndex        =   3
       ToolTipText     =   " Salir "
@@ -61,7 +61,7 @@ Begin VB.Form InformeExcel
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   105512961
+      Format          =   115802113
       CurrentDate     =   43717
    End
    Begin MSComCtl2.DTPicker dtpDesde 
@@ -82,7 +82,7 @@ Begin VB.Form InformeExcel
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   105512961
+      Format          =   115802113
       CurrentDate     =   43717
    End
    Begin VB.CommandButton cmdExportar 
@@ -98,7 +98,7 @@ Begin VB.Form InformeExcel
       EndProperty
       Height          =   615
       Left            =   2520
-      Picture         =   "informeExcel.frx":058A
+      Picture         =   "informeTotalesXDNI.frx":058A
       Style           =   1  'Graphical
       TabIndex        =   2
       ToolTipText     =   " Exportar "
@@ -122,7 +122,7 @@ Begin VB.Form InformeExcel
       Width           =   1695
    End
 End
-Attribute VB_Name = "InformeExcel"
+Attribute VB_Name = "informeTotalesXDNI"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -137,7 +137,7 @@ Private Sub cmdExportar_Click()
     desde = dtpDesde.Value
     hasta = dtpHasta.Value
     
-    Exportar_Excel "C:\Sistema\Listado.xls", desde, hasta
+    Exportar_ExcelDNI "C:\Sistema\Listado.xls", desde, hasta
 
 End Sub
 
