@@ -1,7 +1,7 @@
 VERSION 5.00
-Begin VB.Form Empleados 
+Begin VB.Form Tipos 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "Empleados"
+   Caption         =   "Tipos"
    ClientHeight    =   1695
    ClientLeft      =   45
    ClientTop       =   330
@@ -21,52 +21,7 @@ Begin VB.Form Empleados
    MinButton       =   0   'False
    ScaleHeight     =   1695
    ScaleWidth      =   10815
-   Begin VB.ComboBox cboTipos 
-      BeginProperty Font 
-         Name            =   "Lucida Sans Unicode"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   345
-      ItemData        =   "Empleados.frx":0000
-      Left            =   5400
-      List            =   "Empleados.frx":004C
-      Style           =   2  'Dropdown List
-      TabIndex        =   10
-      Top             =   1080
-      Width           =   3135
-   End
-   Begin VB.TextBox txtCuil 
-      BackColor       =   &H00FFFFFF&
-      BeginProperty DataFormat 
-         Type            =   1
-         Format          =   """$"" #.##0,00"
-         HaveTrueFalseNull=   0
-         FirstDayOfWeek  =   0
-         FirstWeekOfYear =   0
-         LCID            =   11274
-         SubFormatType   =   2
-      EndProperty
-      BeginProperty Font 
-         Name            =   "Lucida Sans Unicode"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   345
-      Left            =   2760
-      TabIndex        =   7
-      Top             =   1080
-      Width           =   2535
-   End
-   Begin VB.TextBox txtNroLegajo 
+   Begin VB.TextBox txtCodigo 
       BackColor       =   &H00FFFFFF&
       BeginProperty DataFormat 
          Type            =   1
@@ -105,38 +60,12 @@ Begin VB.Form Empleados
       EndProperty
       Height          =   615
       Left            =   9720
-      Picture         =   "Empleados.frx":0161
+      Picture         =   "Tipos.frx":0000
       Style           =   1  'Graphical
-      TabIndex        =   9
+      TabIndex        =   5
       ToolTipText     =   " Salir "
       Top             =   840
       Width           =   855
-   End
-   Begin VB.TextBox txtNumero 
-      BackColor       =   &H00FFFFFF&
-      BeginProperty DataFormat 
-         Type            =   1
-         Format          =   """$"" #.##0,00"
-         HaveTrueFalseNull=   0
-         FirstDayOfWeek  =   0
-         FirstWeekOfYear =   0
-         LCID            =   11274
-         SubFormatType   =   2
-      EndProperty
-      BeginProperty Font 
-         Name            =   "Lucida Sans Unicode"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   345
-      Left            =   120
-      TabIndex        =   6
-      Top             =   1080
-      Width           =   2535
    End
    Begin VB.TextBox txtNombre 
       BackColor       =   &H00FFFFFF&
@@ -177,49 +106,15 @@ Begin VB.Form Empleados
       EndProperty
       Height          =   615
       Left            =   8760
-      Picture         =   "Empleados.frx":06EB
+      Picture         =   "Tipos.frx":058A
       Style           =   1  'Graphical
-      TabIndex        =   8
+      TabIndex        =   4
       ToolTipText     =   " Guardar"
       Top             =   840
       Width           =   855
    End
-   Begin VB.Label Label2 
-      Caption         =   "Tipo Empleado"
-      BeginProperty Font 
-         Name            =   "Lucida Sans Unicode"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   255
-      Left            =   5400
-      TabIndex        =   11
-      Top             =   840
-      Width           =   2535
-   End
-   Begin VB.Label Label1 
-      Caption         =   "Cuil"
-      BeginProperty Font 
-         Name            =   "Lucida Sans Unicode"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   255
-      Left            =   2760
-      TabIndex        =   5
-      Top             =   840
-      Width           =   2535
-   End
    Begin VB.Label Label13 
-      Caption         =   "Nro Legajo"
+      Caption         =   "Codigo"
       BeginProperty Font 
          Name            =   "Lucida Sans Unicode"
          Size            =   9
@@ -234,23 +129,6 @@ Begin VB.Form Empleados
       TabIndex        =   0
       Top             =   120
       Width           =   1335
-   End
-   Begin VB.Label Label5 
-      Caption         =   "Numero Documento"
-      BeginProperty Font 
-         Name            =   "Lucida Sans Unicode"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   255
-      Left            =   120
-      TabIndex        =   4
-      Top             =   840
-      Width           =   2535
    End
    Begin VB.Label Label4 
       Caption         =   "Nombre*"
@@ -270,7 +148,7 @@ Begin VB.Form Empleados
       Width           =   1095
    End
 End
-Attribute VB_Name = "Empleados"
+Attribute VB_Name = "Tipos"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -280,30 +158,30 @@ Public id As Integer
 
 Private Sub cmdGuardar_Click()
         
-    If txtNumero.Text = "" Then
-        Call MsgBox("El CAMPO DOCUMENTO ES OBLIGATORIO", vbExclamation, App.Title)
+    If txtCodigo.Text = "" Then
+        Call MsgBox("El CAMPO CODIGO ES OBLIGATORIO", vbExclamation, App.Title)
         txtNumero.SetFocus
         Exit Sub
     End If
     
     If txtNombre.Text = "" Then
-        Call MsgBox("El CAMPO DESCRIPCIÓN ES OBLIGATORIO", vbExclamation, App.Title)
+        Call MsgBox("El CAMPO NOMBRE ES OBLIGATORIO", vbExclamation, App.Title)
         txtNombre.SetFocus
         Exit Sub
     End If
     
     Set rsGuardar = New ADODB.Recordset
-    SQL = "SELECT * FROM empleados WHERE id = " & id
+    SQL = "SELECT * FROM Tipos WHERE id = " & id
     rsGuardar.Open SQL, Data, adOpenKeyset, adLockOptimistic
     
     If Nuevo Then
         
-        'Verificar que no se carguen dos empleados con el mismo código
+        'Verificar que no se carguen dos Tipos con el mismo código
         Set rsValidar = New ADODB.Recordset
-        SQL = "SELECT id from empleados WHERE numerodocumento = '" & txtNumero.Text & "' AND eliminado = 0 LIMIT 1"
+        SQL = "SELECT id from Tipos WHERE codigo = '" & txtCodigo.Text & "' LIMIT 1"
         rsValidar.Open SQL, Data, adOpenKeyset, adLockOptimistic
         If Not rsValidar.BOF And Not rsValidar.EOF Then
-            Call MsgBox("YA EXISTE UN EMPLEADO CON EL MISMO DNI   ", vbExclamation, App.Title)
+            Call MsgBox("CODIGO EN USO", vbExclamation, App.Title)
             rsGuardar.Close
             Exit Sub
         End If
@@ -313,12 +191,8 @@ Private Sub cmdGuardar_Click()
         
     End If
     
-    rsGuardar!nombre = UCase(txtNombre.Text)
-    rsGuardar!numerodocumento = txtNumero.Text
-    rsGuardar!nrolegajo = txtNroLegajo.Text
-    rsGuardar!Cuil = txtCuil.Text
-    rsGuardar!idTipo = cboTipos.ItemData(cboTipos.ListIndex)
-    rsGuardar!eliminado = 0
+    rsGuardar!codigo = UCase(txtCodigo.Text)
+    rsGuardar!nombre = txtNombre.Text
     rsGuardar.Update
     rsGuardar.Close
     Unload Me
@@ -333,60 +207,28 @@ End Sub
 
 Private Sub Form_Load()
     
-    CargaCombo "tipos", "nombre", "id", cboTipos
     initForm Me
     
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     
-    EmpleadosList.Show
+    TipoList.Show
     
 End Sub
 
-Private Sub txtCuil_KeyPress(KeyAscii As Integer)
+Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
 
     If KeyAscii = 13 Then
         PasarFoco
         KeyAscii = 0
     Else
-        SoloEnteros txtCuil, KeyAscii
-    End If
-
-End Sub
-
-Private Sub txtNroLegajo_KeyPress(KeyAscii As Integer)
-
-    If KeyAscii = 13 Then
-        PasarFoco
-        KeyAscii = 0
-    Else
-        SoloEnteros txtNroLegajo, KeyAscii
-    End If
-
-End Sub
-
-Private Sub txtNumero_KeyPress(KeyAscii As Integer)
-
-    If KeyAscii = 13 Then
-        PasarFoco
-        KeyAscii = 0
-    Else
-        SoloEnteros txtNumero, KeyAscii
+        SoloEnteros txtCodigo, KeyAscii
     End If
 
 End Sub
 
 Private Sub txtNombre_KeyPress(KeyAscii As Integer)
-    
-    If KeyAscii = 13 Then
-        PasarFoco
-        KeyAscii = 0
-    End If
-    
-End Sub
-
-Private Sub cboTipos_KeyPress(KeyAscii As Integer)
     
     If KeyAscii = 13 Then
         PasarFoco

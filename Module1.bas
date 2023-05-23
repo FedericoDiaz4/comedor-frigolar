@@ -329,122 +329,16 @@ Public Function Exportar_Excel(sOutputPath As String, Optional desde As Date, Op
     Set o_Excel = CreateObject("Excel.Application")
     Set o_Libro = o_Excel.Workbooks.Add
     Set o_Hoja = o_Libro.Worksheets.Add
-'    o_Hoja.Name = Left(Replace(Replace("Totales x dia", "*", ""), "/", " "), 30)
-'
-'    Set rsconsulta = New ADODB.Recordset
-'    SQL = "SELECT count(c.id) cantidad, c.fecha FROM comidas AS c "
-'    SQL = SQL & "INNER JOIN empleados as p ON p.id = c.idempleado "
-'    SQL = SQL & "WHERE date(c.fecha) BETWEEN '" & Format(desde, "yyyy-MM-dd") & "' AND '" & Format(hasta, "yyyy-MM-dd") & "' "
-'    SQL = SQL & "GROUP BY date(c.fecha)"
-'
-'    rsconsulta.Open SQL, Data, adOpenKeyset, adLockOptimistic
-'
-'    If rsconsulta.BOF And rsconsulta.EOF Then
-'        Call MsgBox("No existen datos cargados para el período seleccionado.", vbExclamation, App.Title)
-'        Exit Function
-'    End If
-'
-'    Fila = 3
-'    Total = 0
-'
-'    ' Cargo Encabezado
-'    o_Hoja.Cells(Fila, 1).Value = "Empresa"
-'    o_Hoja.Cells(Fila, 2).Value = "Dia"
-'    o_Hoja.Cells(Fila, 3).Value = "Cant Total"
-'
-'
-'    Fila = Fila + 1
-'    o_Excel.Range("1:1").Font.Bold = True
-'    o_Excel.Range("A1:B1").interior.Color = RGB(166, 166, 166)
-'    o_Excel.Range("3:3").Font.Bold = True
-'
-'
-'    ' Cargo Contenido
-'    Do While Not rsconsulta.EOF
-'
-'        o_Hoja.Cells(Fila, 2).Value = rsconsulta!fecha
-'        o_Hoja.Cells(Fila, 2).numberformat = "dd/mm/yyyy"
-'        o_Hoja.Cells(Fila, 3).Value = rsconsulta!Cantidad
-'
-'        Fila = Fila + 1
-'        Total = Total + rsconsulta!Cantidad
-'
-'        rsconsulta.MoveNext
-'
-'    Loop
-'
-'    'Autoajusta el ancho de las columnas corte y depósito
-'    o_Excel.Range("A:A").EntireColumn.AutoFit
-'    o_Excel.Range("B:B").EntireColumn.AutoFit
-'    o_Excel.Range("C:C").EntireColumn.AutoFit
-'
-'    rsconsulta.Close
-'
-'    o_Hoja.Cells(1, 1).Value = "Total"
-'    o_Hoja.Cells(1, 2).Value = Total
-'
-'    Set o_Hoja = o_Libro.Worksheets.Add
-'    o_Hoja.Name = Left(Replace(Replace("Totales x Persona", "*", ""), "/", " "), 30)
-'
-'    Set rsconsulta = New ADODB.Recordset
-'    SQL = "SELECT COUNT(c.id) cantidad, p.nombre empleado, p.nrolegajo legajo, c.fecha, sum(c.precio) importe FROM comidas AS c "
-'    SQL = SQL & "INNER JOIN empleados AS p ON p.id = c.idempleado "
-'    SQL = SQL & "WHERE date(c.fecha) BETWEEN '" & Format(desde, "yyyy-MM-dd") & "' AND '" & Format(hasta, "yyyy-MM-dd") & "' "
-'    SQL = SQL & "GROUP BY empleado "
-'    rsconsulta.Open SQL, Data, adOpenKeyset, adLockOptimistic
-'
-'    Fila = 3
-'
-'    ' Cargo Encabezado
-'    o_Hoja.Cells(Fila, 1).Value = "Empresa"
-'    o_Hoja.Cells(Fila, 2).Value = "Apellido, Nombre"
-'    o_Hoja.Cells(Fila, 3).Value = "Legajo"
-'    o_Hoja.Cells(Fila, 4).Value = "Comidas"
-'    o_Hoja.Cells(Fila, 5).Value = "Importe"
-'
-'    Fila = Fila + 1
-'    o_Excel.Range("1:1").Font.Bold = True
-'    o_Excel.Range("A1:B1").interior.Color = RGB(166, 166, 166)
-'    o_Excel.Range("3:3").Font.Bold = True
-'    Total = 0
-'
-'    ' Cargo Contenido
-'    Do While Not rsconsulta.EOF
-'
-'        o_Hoja.Cells(Fila, 2).Value = rsconsulta!empleado
-'        o_Hoja.Cells(Fila, 3).Value = rsconsulta!legajo
-'        o_Hoja.Cells(Fila, 4).Value = rsconsulta!Cantidad
-'        o_Hoja.Cells(Fila, 5).Value = CDbl(rsconsulta!importe)
-'
-'        Fila = Fila + 1
-'        Total = Total + rsconsulta!importe
-'
-'        rsconsulta.MoveNext
-'    Loop
-'
-'    Total = rsconsulta.RecordCount
-'    o_Hoja.Cells(Fila, 4).Value = Total
-'    'Autoajusta el ancho de las columnas corte y depósito
-'    o_Excel.Range("A:A").EntireColumn.AutoFit
-'    o_Excel.Range("B:B").EntireColumn.AutoFit
-'    o_Excel.Range("C:C").EntireColumn.AutoFit
-'    o_Excel.Range("D:D").EntireColumn.AutoFit
-'    o_Excel.Range("E:E").EntireColumn.AutoFit
-'
-'    rsconsulta.Close
-'
-'    o_Hoja.Cells(1, 1).Value = "Total"
-'    o_Hoja.Cells(1, 2).Value = Total
-    
     
     Set o_Hoja = o_Libro.Worksheets.Add
     
     Set rsconsulta = New ADODB.Recordset
-    SQL = "SELECT c.id, p.nombre empleado, p.numerodocumento nrodoc, c.fecha, c.precio FROM comidas as c "
+    SQL = "SELECT c.id, p.nombre empleado, p.nrolegajo nrodoc, c.fecha, c.precio precio, p.idtipo FROM comidas as c "
     SQL = SQL & "INNER JOIN empleados as p ON p.id = c.idempleado "
     SQL = SQL & "AND date(c.fecha) BETWEEN '" & Format(desde, "yyyy-MM-dd") & "' AND '" & Format(hasta, "yyyy-MM-dd") & "'"
-    SQL = SQL & "ORDER BY c.fecha "
+    SQL = SQL & "ORDER BY p.nrolegajo, c.fecha"
     rsconsulta.Open SQL, Data, adOpenKeyset, adLockOptimistic
+    
     o_Hoja.Name = Left(Replace(Replace("Detalle de Comidas", "*", ""), "/", " "), 30)
     
     total = rsconsulta.RecordCount
@@ -460,14 +354,12 @@ Public Function Exportar_Excel(sOutputPath As String, Optional desde As Date, Op
     ' Cargo Encabezado
     o_Hoja.Cells(Fila, 1).Value = "Empresa"
     o_Hoja.Cells(Fila, 2).Value = "Apellido, Nombre"
-    o_Hoja.Cells(Fila, 3).Value = "Nro Documento"
+    o_Hoja.Cells(Fila, 3).Value = "Nro Legajo"
     o_Hoja.Cells(Fila, 4).Value = "Puesto"
     o_Hoja.Cells(Fila, 5).Value = "Retiró"
     o_Hoja.Cells(Fila, 6).Value = "Dia"
     o_Hoja.Cells(Fila, 7).Value = "Cantidad"
     o_Hoja.Cells(Fila, 8).Value = "Importe"
-    
-
     
     Cantidad = 0
     Fila = Fila + 1
@@ -485,7 +377,7 @@ Public Function Exportar_Excel(sOutputPath As String, Optional desde As Date, Op
         o_Hoja.Cells(Fila, 6).numberformat = "dd/mm/yyyy hh:mm:ss"
         o_Hoja.Cells(Fila, 7).Value = "1"
         o_Hoja.Cells(Fila, 8).Value = CDbl(rsconsulta!Precio)
-
+        
         Cantidad = Cantidad + 1
         Fila = Fila + 1
         zMain.pBar.Value = zMain.pBar.Value + 1
@@ -527,6 +419,142 @@ Public Function Exportar_Excel(sOutputPath As String, Optional desde As Date, Op
     Exportar_Excel = True
     
 End Function
+
+Public Function Exportar_Excel_Totales(sOutputPath As String, Optional desde As Date, Optional hasta As Date) As Boolean
+    
+    Dim o_Excel     As Object
+    Dim o_Libro     As Object
+    Dim o_Hoja      As Object
+    Dim Fila        As Long
+    Dim nombre      As String
+    Dim Cantidad    As Integer
+    Dim Totalpersona As Double
+    
+    ' -- Crea el objeto Excel, el objeto workBook y el objeto sheet
+    Set o_Excel = CreateObject("Excel.Application")
+    Set o_Libro = o_Excel.Workbooks.Add
+    Set o_Hoja = o_Libro.Worksheets.Add
+    
+    Set o_Hoja = o_Libro.Worksheets.Add
+    
+    'Set rsconsulta = New ADODB.Recordset
+    'SQL = "SELECT c.id, p.nombre empleado, p.nrolegajo nrodoc, c.fecha, c.precio, p.idtipo FROM comidas as c "
+    'SQL = SQL & "INNER JOIN empleados as p ON p.id = c.idempleado "
+    'SQL = SQL & "AND date(c.fecha) BETWEEN '" & Format(desde, "yyyy-MM-dd") & "' AND '" & Format(hasta, "yyyy-MM-dd") & "'"
+    'SQL = SQL & "ORDER BY p.nrolegajo, c.fecha"
+    'rsconsulta.Open SQL, Data, adOpenKeyset, adLockOptimistic
+    
+    Set rsconsulta = New ADODB.Recordset
+    SQL = "SELECT c.id, p.id, p.nombre empleado, p.nrolegajo nrodoc, c.fecha, sum(c.precio) PRECIO, p.idtipo FROM comidas as c "
+    SQL = SQL & "INNER JOIN empleados as p ON p.id = c.idempleado "
+    SQL = SQL & "AND date(c.fecha) BETWEEN '" & Format(desde, "yyyy-MM-dd") & "' AND '" & Format(hasta, "yyyy-MM-dd") & "'"
+    SQL = SQL & "GROUP BY p.id ORDER BY p.nrolegajo, c.fecha"
+    rsconsulta.Open SQL, Data, adOpenKeyset, adLockOptimistic
+    
+    o_Hoja.Name = Left(Replace(Replace("Detalle de Comidas", "*", ""), "/", " "), 30)
+    
+    total = rsconsulta.RecordCount
+    
+    Fila = 3
+    
+    zMain.pBar.Value = 0
+    zMain.pBar.Height = 255
+    If (total <> 0) Then
+        zMain.pBar.Max = total
+    End If
+    
+    ' Cargo Encabezado
+    o_Hoja.Cells(Fila, 1).Value = "Empresa"
+    o_Hoja.Cells(Fila, 2).Value = "Apellido, Nombre"
+    o_Hoja.Cells(Fila, 3).Value = "Nro Legajo"
+    o_Hoja.Cells(Fila, 4).Value = "Puesto"
+    o_Hoja.Cells(Fila, 5).Value = "Retiró"
+    o_Hoja.Cells(Fila, 6).Value = "Dia"
+    o_Hoja.Cells(Fila, 7).Value = "Cantidad"
+    o_Hoja.Cells(Fila, 8).Value = "Importe"
+    o_Hoja.Cells(Fila, 9).Value = "Beneficio"
+    o_Hoja.Cells(Fila, 10).Value = "Final"
+    
+
+    
+    Cantidad = 0
+    Fila = Fila + 1
+    ' Encabezado en negrita
+    o_Excel.Range("1:1").Font.Bold = True
+    o_Excel.Range("A1:B1").interior.Color = RGB(166, 166, 166)
+    o_Excel.Range("3:3").Font.Bold = True
+        
+    ' Cargo Contenido
+    Do While Not rsconsulta.EOF
+    
+        o_Hoja.Cells(Fila, 2).Value = rsconsulta!empleado
+        o_Hoja.Cells(Fila, 3).Value = rsconsulta!nrodoc
+        o_Hoja.Cells(Fila, 6).Value = rsconsulta!fecha
+        o_Hoja.Cells(Fila, 6).numberformat = "dd/mm/yyyy hh:mm:ss"
+        o_Hoja.Cells(Fila, 7).Value = "1"
+        o_Hoja.Cells(Fila, 8).Value = CDbl(rsconsulta!Precio)
+        If (rsconsulta!idTipo = 1) Then
+            o_Hoja.Cells(Fila, 9).Value = CDbl(0)
+            o_Hoja.Cells(Fila, 10).Value = CDbl(rsconsulta!Precio)
+        ElseIf (rsconsulta!idTipo = 2) Then
+            o_Hoja.Cells(Fila, 9).Value = CDbl(-5000)
+            If (rsconsulta!Precio < 5000) Then
+                o_Hoja.Cells(Fila, 10).Value = CDbl(0)
+            Else
+                o_Hoja.Cells(Fila, 10).Value = CDbl(rsconsulta!Precio) - CDbl(5000)
+            End If
+        ElseIf (rsconsulta!idTipo = 3) Then
+            o_Hoja.Cells(Fila, 9).Value = CDbl(rsconsulta!Precio)
+            o_Hoja.Cells(Fila, 10).Value = CDbl(0)
+        ElseIf (rsconsulta!idTipo = 4) Then
+            o_Hoja.Cells(Fila, 9).Value = CDbl(0)
+            o_Hoja.Cells(Fila, 10).Value = CDbl(rsconsulta!Precio)
+        End If
+        
+        Cantidad = Cantidad + 1
+        Fila = Fila + 1
+        zMain.pBar.Value = zMain.pBar.Value + 1
+        
+        rsconsulta.MoveNext
+        
+    Loop
+
+    rsconsulta.Close
+    
+    'Autoajusta el ancho de las columnas corte y depósito
+    o_Excel.Range("A:A").EntireColumn.AutoFit
+    o_Excel.Range("B:B").EntireColumn.AutoFit
+    o_Excel.Range("C:C").EntireColumn.AutoFit
+    o_Excel.Range("D:D").EntireColumn.AutoFit
+    o_Excel.Range("E:E").EntireColumn.AutoFit
+    o_Excel.Range("F:F").EntireColumn.AutoFit
+    o_Excel.Columns("G").ColumnWidth = 10.67
+    o_Excel.Range("H:H").EntireColumn.AutoFit
+    o_Excel.Range("I:I").EntireColumn.AutoFit
+
+    o_Hoja.Cells(Fila, 7).Value = Cantidad
+
+    o_Hoja.Cells(1, 1).Value = "Total"
+    o_Hoja.Cells(1, 2).Value = Cantidad
+    
+    o_Excel.Worksheets("Hoja1").Delete
+    o_Excel.Worksheets("Hoja2").Delete
+    o_Excel.Worksheets("Hoja3").Delete
+    'o_Libro.Close True, sOutputPath
+    o_Excel.Visible = True
+    
+    zMain.pBar.Value = 0
+    zMain.pBar.Height = 0
+    
+    ' -- Cerrar Excel
+    'o_Excel.Quit
+
+    ' -- Terminar instancias
+    Call ReleaseObjects(o_Excel, o_Libro, o_Hoja)
+    Exportar_Excel_Totales = True
+    
+End Function
+
 
 Public Function Exportar_ExcelDNI(sOutputPath As String, Optional desde As Date, Optional hasta As Date) As Boolean
     
@@ -1072,10 +1100,13 @@ Public Sub ImportarExcel()
                 rsEmpleado!nrolegajo = rsExcel!legajo
                 rsEmpleado!nombre = rsExcel!nombre
                 rsEmpleado!numerodocumento = rsExcel!DNI
-                rsEmpleado!Cuil = rsExcel!Cuil
+                rsEmpleado!idTipo = rsExcel!tipo
                 Existe = False
             Else
                 Existe = True
+                rsEmpleado!nrolegajo = rsExcel!legajo
+                rsEmpleado!numerodocumento = rsExcel!DNI
+                rsEmpleado!idTipo = rsExcel!tipo
                 
             End If
             

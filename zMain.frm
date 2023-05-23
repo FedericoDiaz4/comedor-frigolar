@@ -31,6 +31,9 @@ Begin VB.MDIForm zMain
       Begin VB.Menu mpEmpresas 
          Caption         =   "&MENUS"
       End
+      Begin VB.Menu mpTipos 
+         Caption         =   "&TIPOS"
+      End
       Begin VB.Menu mpSector 
          Caption         =   "&SECTORES"
          Visible         =   0   'False
@@ -91,7 +94,10 @@ Begin VB.MDIForm zMain
          Caption         =   "INFORME &TXT"
       End
       Begin VB.Menu miInformeExcel 
-         Caption         =   "INFORME &EXCEL"
+         Caption         =   "INFORME &EXCEL DETALLE"
+      End
+      Begin VB.Menu miInformeExcelTotal 
+         Caption         =   "&INFORME &EXCEL TOTALES"
       End
       Begin VB.Menu miInformeZeta 
          Caption         =   "INFORME ZETA"
@@ -143,6 +149,12 @@ Private Sub miInformeExcel_Click()
 
 End Sub
 
+Private Sub miInformeExcelTotal_Click()
+
+    informeExcelTotales.Show
+
+End Sub
+
 Private Sub miInformeTotalesXDNI_Click()
 
     informeTotalesXDNI.Show
@@ -190,6 +202,12 @@ End Sub
 Private Sub mpSector_Click()
 
     SectoresList.Show
+
+End Sub
+
+Private Sub mpTipos_Click()
+
+    TipoList.Show
 
 End Sub
 

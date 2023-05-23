@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{0ECD9B60-23AA-11D0-B351-00A0C9055D8E}#6.0#0"; "MSHFLXGD.OCX"
-Begin VB.Form EmpleadosList 
-   Caption         =   "Listado de Empleados"
+Begin VB.Form TipoList 
+   Caption         =   "Listado de tipos de mpleados"
    ClientHeight    =   5760
    ClientLeft      =   120
    ClientTop       =   405
@@ -44,7 +44,7 @@ Begin VB.Form EmpleadosList
          EndProperty
          Height          =   615
          Left            =   0
-         Picture         =   "EmpleadosList.frx":0000
+         Picture         =   "TipoList.frx":0000
          Style           =   1  'Graphical
          TabIndex        =   8
          ToolTipText     =   " Nuevo"
@@ -64,7 +64,7 @@ Begin VB.Form EmpleadosList
          EndProperty
          Height          =   615
          Left            =   1920
-         Picture         =   "EmpleadosList.frx":058A
+         Picture         =   "TipoList.frx":058A
          Style           =   1  'Graphical
          TabIndex        =   7
          ToolTipText     =   " Eliminar"
@@ -84,7 +84,7 @@ Begin VB.Form EmpleadosList
          EndProperty
          Height          =   615
          Left            =   960
-         Picture         =   "EmpleadosList.frx":0B14
+         Picture         =   "TipoList.frx":0B14
          Style           =   1  'Graphical
          TabIndex        =   6
          ToolTipText     =   " Modificar"
@@ -104,7 +104,7 @@ Begin VB.Form EmpleadosList
          EndProperty
          Height          =   615
          Left            =   2880
-         Picture         =   "EmpleadosList.frx":109E
+         Picture         =   "TipoList.frx":109E
          Style           =   1  'Graphical
          TabIndex        =   5
          ToolTipText     =   " Salir "
@@ -165,9 +165,9 @@ Begin VB.Form EmpleadosList
             Strikethrough   =   0   'False
          EndProperty
          Height          =   360
-         ItemData        =   "EmpleadosList.frx":1628
+         ItemData        =   "TipoList.frx":1628
          Left            =   120
-         List            =   "EmpleadosList.frx":1632
+         List            =   "TipoList.frx":1632
          Style           =   2  'Dropdown List
          TabIndex        =   1
          Top             =   250
@@ -210,7 +210,7 @@ Begin VB.Form EmpleadosList
       _Band(0).Cols   =   2
    End
 End
-Attribute VB_Name = "EmpleadosList"
+Attribute VB_Name = "TipoList"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -224,57 +224,32 @@ Private Sub cboBuscar_Click()
     
 End Sub
 
-Private Sub cmdEliminar_Click()
-    
-    If Flex.TextMatrix(Flex.Row, 0) = "" Then
-        Exit Sub
-    End If
-    
-    Select Case MsgBox("¿DESEA ELIMINAR EL EMPLEADO " & Flex.TextMatrix(Flex.Row, 2) & "?", vbYesNo Or vbQuestion Or vbDefaultButton2, App.Title)
-        Case vbNo: Exit Sub
-    End Select
-    
-    Set rsDelete = New ADODB.Recordset
-    SQL = "UPDATE empleados SET eliminado = 1 WHERE id = " & Flex.TextMatrix(Flex.Row, 0)
-    rsDelete.Open SQL, Data, adOpenKeyset, adLockOptimistic
-    
-    Cargar
-    
-End Sub
-
 Private Sub cmdModificar_Click()
     
     If Flex.TextMatrix(Flex.Row, 0) = "" Then
         Exit Sub
     End If
     
-    Empleados.Nuevo = False
-    Empleados.id = Flex.TextMatrix(Flex.Row, 0)
+    Tipos.Nuevo = False
+    Tipos.id = Flex.TextMatrix(Flex.Row, 0)
     
-    Set rsCliente = New ADODB.Recordset
-    SQL = "SELECT * FROM empleados WHERE id = " & Empleados.id
-    rsCliente.Open SQL, Data, adOpenKeyset, adLockOptimistic
-    Empleados.txtNombre.Text = rsCliente!nombre
-    Empleados.txtNumero.Text = rsCliente!numerodocumento
-    Empleados.txtNroLegajo.Text = rsCliente!nrolegajo
-    Empleados.txtCuil.Text = rsCliente!Cuil
-    Dim idTipo As Integer
-    If (rsCliente!idTipo <> 0) Then
-        idTipo = rsCliente!idTipo
-    End If
-    rsCliente.Close
+    Set rsTipo = New ADODB.Recordset
+    SQL = "SELECT * FROM Tipos WHERE id = " & Tipos.id
+    rsTipo.Open SQL, Data, adOpenKeyset, adLockOptimistic
+    Tipos.txtCodigo.Text = rsTipo!codigo
+    Tipos.txtNombre.Text = rsTipo!nombre
+    rsTipo.Close
     
     Unload Me
-    Empleados.Show
-    Empleados.cboTipos.Text = getData(idTipo, "nombre", "tipos")
+    Tipos.Show
     
 End Sub
 
 Private Sub cmdNuevo_Click()
     
-    Empleados.Nuevo = True
+    Tipos.Nuevo = True
     Unload Me
-    Empleados.Show
+    Tipos.Show
     
 End Sub
 
@@ -294,12 +269,10 @@ End Sub
 
 Sub ordenaFlex()
     
-    Flex.FormatString = "id|Num Doc|Nombre|Nro Legajo|Cuil"
+    Flex.FormatString = "id|Codigo|Nombre"
     Flex.ColWidth(0) = 0
     Flex.ColWidth(1) = 1400
     Flex.ColWidth(2) = 4000
-    Flex.ColWidth(3) = 1100
-    Flex.ColWidth(4) = 1650
     
 End Sub
 
@@ -307,10 +280,10 @@ Sub Cargar()
     
     Flex.Clear
     Flex.Rows = 2
-    Flex.Cols = 5
+    Flex.Cols = 3
     
     Set Recordset = New ADODB.Recordset
-    SQL = "SELECT e.id, e.numerodocumento, e.nombre, e.nrolegajo, e.cuil FROM empleados as e WHERE e.eliminado = 0"
+    SQL = "SELECT e.id, e.codigo, e.nombre FROM Tipos as e"
     If txtBuscar.Text <> "" Then
         SQL = SQL & " AND e." & cboBuscar.Text & " LIKE '%" & txtBuscar.Text & "%'"
     End If
@@ -320,10 +293,8 @@ Sub Cargar()
         'Set Flex.DataSource = Recordset
         Do While Not Recordset.EOF
             Flex.TextMatrix(Flex.Rows - 1, 0) = Recordset!id
-            Flex.TextMatrix(Flex.Rows - 1, 1) = Format(Recordset!numerodocumento, "00,000,000")
+            Flex.TextMatrix(Flex.Rows - 1, 1) = Recordset!codigo
             Flex.TextMatrix(Flex.Rows - 1, 2) = Recordset!nombre
-            Flex.TextMatrix(Flex.Rows - 1, 3) = Recordset!nrolegajo
-            Flex.TextMatrix(Flex.Rows - 1, 4) = Format(Recordset!Cuil, "00-00000000-0")
             Flex.Rows = Flex.Rows + 1
             Recordset.MoveNext
         Loop
