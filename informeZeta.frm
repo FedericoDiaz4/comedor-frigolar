@@ -62,7 +62,7 @@ Begin VB.Form InformeZeta
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   100007937
+      Format          =   129368065
       CurrentDate     =   43717
    End
    Begin MSComCtl2.DTPicker dtpDesde 
@@ -83,7 +83,7 @@ Begin VB.Form InformeZeta
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   100007937
+      Format          =   129368065
       CurrentDate     =   43717
    End
    Begin VB.CommandButton cmdExportar 

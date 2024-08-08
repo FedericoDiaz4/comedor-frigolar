@@ -251,18 +251,21 @@ Private Sub cmdModificar_Click()
     Empleados.Nuevo = False
     Empleados.id = Flex.TextMatrix(Flex.Row, 0)
     
-    Set rsCliente = New ADODB.Recordset
+    Set Rscliente = New ADODB.Recordset
     SQL = "SELECT * FROM empleados WHERE id = " & Empleados.id
-    rsCliente.Open SQL, Data, adOpenKeyset, adLockOptimistic
-    Empleados.txtNombre.Text = rsCliente!nombre
-    Empleados.txtNumero.Text = rsCliente!numerodocumento
-    Empleados.txtNroLegajo.Text = rsCliente!nrolegajo
-    Empleados.txtCuil.Text = rsCliente!Cuil
+    Rscliente.Open SQL, Data, adOpenKeyset, adLockOptimistic
+    Empleados.txtNombre.Text = Rscliente!nombre
+    Empleados.txtNumero.Text = Rscliente!numerodocumento
+    Empleados.txtNroLegajo.Text = Rscliente!nrolegajo
+    Empleados.txtCuil.Text = Rscliente!Cuil
     Dim idTipo As Integer
-    If (rsCliente!idTipo <> 0) Then
-        idTipo = rsCliente!idTipo
+    If (Rscliente!idTipo <> 0) Then
+        idTipo = Rscliente!idTipo
     End If
-    rsCliente.Close
+    If (Rscliente!idEmpresa <> 0) Then
+        idEmpresa = Rscliente!idEmpresa
+    End If
+    Rscliente.Close
     
     Unload Me
     Empleados.Show

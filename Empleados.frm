@@ -2,7 +2,7 @@ VERSION 5.00
 Begin VB.Form Empleados 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Empleados"
-   ClientHeight    =   1695
+   ClientHeight    =   2355
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   10815
@@ -19,9 +19,9 @@ Begin VB.Form Empleados
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    MinButton       =   0   'False
-   ScaleHeight     =   1695
+   ScaleHeight     =   2355
    ScaleWidth      =   10815
-   Begin VB.ComboBox cboTipos 
+   Begin VB.ComboBox CboEmpresa 
       BeginProperty Font 
          Name            =   "Lucida Sans Unicode"
          Size            =   8.25
@@ -33,8 +33,27 @@ Begin VB.Form Empleados
       EndProperty
       Height          =   345
       ItemData        =   "Empleados.frx":0000
-      Left            =   5400
+      Left            =   8040
       List            =   "Empleados.frx":004C
+      Style           =   2  'Dropdown List
+      TabIndex        =   13
+      Top             =   1080
+      Width           =   2535
+   End
+   Begin VB.ComboBox cboTipos 
+      BeginProperty Font 
+         Name            =   "Lucida Sans Unicode"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   345
+      ItemData        =   "Empleados.frx":0161
+      Left            =   4800
+      List            =   "Empleados.frx":01AD
       Style           =   2  'Dropdown List
       TabIndex        =   10
       Top             =   1080
@@ -64,7 +83,7 @@ Begin VB.Form Empleados
       Left            =   2760
       TabIndex        =   7
       Top             =   1080
-      Width           =   2535
+      Width           =   1935
    End
    Begin VB.TextBox txtNroLegajo 
       BackColor       =   &H00FFFFFF&
@@ -105,11 +124,11 @@ Begin VB.Form Empleados
       EndProperty
       Height          =   615
       Left            =   9720
-      Picture         =   "Empleados.frx":0161
+      Picture         =   "Empleados.frx":02C2
       Style           =   1  'Graphical
       TabIndex        =   9
       ToolTipText     =   " Salir "
-      Top             =   840
+      Top             =   1560
       Width           =   855
    End
    Begin VB.TextBox txtNumero 
@@ -177,12 +196,29 @@ Begin VB.Form Empleados
       EndProperty
       Height          =   615
       Left            =   8760
-      Picture         =   "Empleados.frx":06EB
+      Picture         =   "Empleados.frx":084C
       Style           =   1  'Graphical
       TabIndex        =   8
       ToolTipText     =   " Guardar"
-      Top             =   840
+      Top             =   1560
       Width           =   855
+   End
+   Begin VB.Label Label3 
+      Caption         =   "Empresa"
+      BeginProperty Font 
+         Name            =   "Lucida Sans Unicode"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   8040
+      TabIndex        =   12
+      Top             =   840
+      Width           =   2535
    End
    Begin VB.Label Label2 
       Caption         =   "Tipo Empleado"
@@ -196,7 +232,7 @@ Begin VB.Form Empleados
          Strikethrough   =   0   'False
       EndProperty
       Height          =   255
-      Left            =   5400
+      Left            =   4800
       TabIndex        =   11
       Top             =   840
       Width           =   2535
@@ -318,6 +354,7 @@ Private Sub cmdGuardar_Click()
     rsGuardar!nrolegajo = txtNroLegajo.Text
     rsGuardar!Cuil = txtCuil.Text
     rsGuardar!idTipo = cboTipos.ItemData(cboTipos.ListIndex)
+    rsGuardar!idEmpresa = CboEmpresa.ItemData(CboEmpresa.ListIndex)
     rsGuardar!eliminado = 0
     rsGuardar.Update
     rsGuardar.Close
@@ -334,6 +371,7 @@ End Sub
 Private Sub Form_Load()
     
     CargaCombo "tipos", "nombre", "id", cboTipos
+    CargaCombo "empresas", "nombre", "id", CboEmpresa
     initForm Me
     
 End Sub

@@ -3,7 +3,7 @@ Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form informeExcelTotales 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Informe Excel"
-   ClientHeight    =   1560
+   ClientHeight    =   3105
    ClientLeft      =   -15
    ClientTop       =   270
    ClientWidth     =   4470
@@ -20,9 +20,47 @@ Begin VB.Form informeExcelTotales
    MaxButton       =   0   'False
    MDIChild        =   -1  'True
    MinButton       =   0   'False
-   ScaleHeight     =   1560
+   ScaleHeight     =   3105
    ScaleWidth      =   4470
    ShowInTaskbar   =   0   'False
+   Begin VB.ComboBox CboEmpresa 
+      BeginProperty Font 
+         Name            =   "Lucida Sans Unicode"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   345
+      ItemData        =   "informeExcelTotales.frx":0000
+      Left            =   120
+      List            =   "informeExcelTotales.frx":004C
+      Style           =   2  'Dropdown List
+      TabIndex        =   3
+      Top             =   1800
+      Width           =   4215
+   End
+   Begin VB.ComboBox cboTipos 
+      BeginProperty Font 
+         Name            =   "Lucida Sans Unicode"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   345
+      ItemData        =   "informeExcelTotales.frx":0161
+      Left            =   120
+      List            =   "informeExcelTotales.frx":01AD
+      Style           =   2  'Dropdown List
+      TabIndex        =   2
+      Top             =   1080
+      Width           =   4215
+   End
    Begin VB.CommandButton cmdSalir 
       Caption         =   "&Salir"
       BeginProperty Font 
@@ -36,11 +74,11 @@ Begin VB.Form informeExcelTotales
       EndProperty
       Height          =   615
       Left            =   3480
-      Picture         =   "informeExcelTotales.frx":0000
+      Picture         =   "informeExcelTotales.frx":02C2
       Style           =   1  'Graphical
-      TabIndex        =   3
+      TabIndex        =   5
       ToolTipText     =   " Salir "
-      Top             =   840
+      Top             =   2280
       Width           =   855
    End
    Begin MSComCtl2.DTPicker dtpHasta 
@@ -61,7 +99,7 @@ Begin VB.Form informeExcelTotales
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   113442817
+      Format          =   36503553
       CurrentDate     =   43717
    End
    Begin MSComCtl2.DTPicker dtpDesde 
@@ -82,7 +120,7 @@ Begin VB.Form informeExcelTotales
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Format          =   113442817
+      Format          =   36503553
       CurrentDate     =   43717
    End
    Begin VB.CommandButton cmdExportar 
@@ -98,18 +136,52 @@ Begin VB.Form informeExcelTotales
       EndProperty
       Height          =   615
       Left            =   2520
-      Picture         =   "informeExcelTotales.frx":058A
+      Picture         =   "informeExcelTotales.frx":084C
       Style           =   1  'Graphical
-      TabIndex        =   2
+      TabIndex        =   4
       ToolTipText     =   " Exportar "
-      Top             =   840
+      Top             =   2280
       Width           =   855
+   End
+   Begin VB.Label Label1 
+      Caption         =   "Empresa"
+      BeginProperty Font 
+         Name            =   "Lucida Sans Unicode"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   120
+      TabIndex        =   9
+      Top             =   1560
+      Width           =   2535
+   End
+   Begin VB.Label Label2 
+      Caption         =   "Tipo Empleado"
+      BeginProperty Font 
+         Name            =   "Lucida Sans Unicode"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   120
+      TabIndex        =   8
+      Top             =   840
+      Width           =   2535
    End
    Begin VB.Label lblHasta 
       Caption         =   "Hasta"
       Height          =   255
       Left            =   2400
-      TabIndex        =   5
+      TabIndex        =   7
       Top             =   120
       Width           =   1695
    End
@@ -117,7 +189,7 @@ Begin VB.Form informeExcelTotales
       Caption         =   "Desde"
       Height          =   255
       Left            =   120
-      TabIndex        =   4
+      TabIndex        =   6
       Top             =   120
       Width           =   1695
    End
@@ -133,11 +205,15 @@ Private Sub cmdExportar_Click()
     Dim idturno As Integer
     Dim desde As Date
     Dim hasta As Date
+    Dim idTipo As Integer
+    Dim idEmpresa As Integer
 
     desde = dtpDesde.Value
     hasta = dtpHasta.Value
+    idTipo = cboTipos.ItemData(cboTipos.ListIndex)
+    idEmpresa = CboEmpresa.ItemData(CboEmpresa.ListIndex)
     
-    Exportar_Excel_Totales "C:\Sistema\Listado.xls", desde, hasta
+    Exportar_Excel_Totales "C:\Sistema\Listado.xls", desde, hasta, idTipo, idEmpresa
 
 End Sub
 
@@ -149,8 +225,8 @@ End Sub
 
 Private Sub Form_Load()
 
-    Me.Width = 4590
-    Me.Height = 2955
+    'Me.Width = 4590
+    'Me.Height = 2955
     initForm Me
     If Day(Now) < 16 Then
         dtpDesde.Value = DateSerial(Year(Now), Month(Now), 1)
@@ -159,6 +235,11 @@ Private Sub Form_Load()
         dtpDesde.Value = DateSerial(Year(Now), Month(Now), 16)
         dtpHasta.Value = DateSerial(Year(Now), Month(Now) + 1, 0)
     End If
+    
+    
+    CargaCombo "tipos", "nombre", "id", cboTipos, True
+    CargaCombo "empresas", "nombre", "id", CboEmpresa, True
+    initForm Me
     
     
 End Sub

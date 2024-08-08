@@ -334,6 +334,41 @@ End Sub
 
 Private Sub cmdGuardar_Click()
 
+    Set rsEmpleado = New ADODB.Recordset
+    SQL = "SELECT * FROM empleados where id = " & idEmpleado
+    rsEmpleado.Open SQL, Data, adOpenKeyset, adLockOptimistic
+    
+    If (rsEmpleado!idTipo = 6) Then
+        Dim fechaDesde As Date
+        Dim fechaHasta As Date
+        fechaHasta = Format(DateSerial(Year(Now), Month(Now) + 1, 0), "yyyy-mm-dd")
+        fechaDesde = Format(DateSerial(Year(Now), Month(Now), 1), "yyyy-mm-dd")
+        Set rsComidas = New ADODB.Recordset
+        SQL = "SELECT COUNT(c.id), SUM(c.precio) preciototal, t.beneficio FROM comidas as c "
+        SQL = SQL & "INNER JOIN empleados AS e ON e.id = c.idempleado INNER JOIN tipos AS T ON t.id = e.idtipo "
+        SQL = SQL & "WHERE idempleado =" & idEmpleado & " "
+        SQL = SQL & "AND date(fecha) BETWEEN '" & Format(fechaDesde, "yyyy-mm-dd") & "' AND '" & Format(fechaHasta, "yyyy-mm-dd") & "' GROUP BY idempleado "
+        rsComidas.Open SQL, Data, adOpenKeyset, adLockOptimistic
+        If Not rsComidas.BOF And Not rsComidas.EOF Then
+            If (rsComidas!preciototal + txtTotal.Text > rsComidas!beneficio) Then
+                Dim totalAPagar As Double
+                totalAPagar = 0
+                If (rsComidas!preciototal <= rsComidas!beneficio) Then
+                    resta = rsComidas!beneficio - rsComidas!preciototal
+                    totalAPagar = CDbl(txtTotal.Text) - resta
+                Else
+                    totalAPagar = CDbl(txtTotal.Text)
+                End If
+                If (totalAPagar > 0) Then
+                    Select Case MsgBox("Beneficio " & rsComidas!beneficio & " superado, el comensal deberá abonar $" & totalAPagar & "¿Confirma el ticket?", vbYesNo Or vbInformation Or vbDefaultButton1, "Desea Eliminar")
+                    Case vbNo
+                        Exit Sub
+                    End Select
+                End If
+            End If
+        End If
+    End If
+
     If idEmpleado <> 9999 Then
         txtCantAnterior.Text = Val(txtCantAnterior.Text) + Val(txtCantidad.Text)
         txtImporteAnterior.Text = Val(txtImporteAnterior.Text) + Val(txtTotal.Text)
@@ -370,6 +405,8 @@ Private Sub cmdGuardar_Click()
     Ingreso.Recargar
 
 End Sub
+
+
 
 Private Sub imprimeTicket()
 
@@ -551,6 +588,7 @@ Private Sub Form_Load()
         hasta = Format(DateSerial(Year(Now), Month(Now) + 1, 0), "yyyy-mm-dd")
     End If
     
+    Dim idTipo As Integer
     'Cargo Datos de la persona
     If idEmpleado <> 9999 Then
         Set rsPersona = New ADODB.Recordset
@@ -558,11 +596,20 @@ Private Sub Form_Load()
         rsPersona.Open SQL, Data, adOpenKeyset, adLockOptimistic
         
         lblPersona.Caption = rsPersona!nombre & " - " & rsPersona!numerodocumento & " - " & rsPersona!nrolegajo
+        idTipo = rsPersona!idTipo
         rsPersona.Close
         
     End If
     'Cargo cantidad e importe acumulado en el mes.
     If idEmpleado <> 9999 Then
+        
+        If (idTipo = 6) Then
+            Dim fechaDesde As Date
+            Dim fechaHasta As Date
+            hasta = Format(DateSerial(Year(Now), Month(Now) + 1, 0), "yyyy-mm-dd")
+            desde = Format(DateSerial(Year(Now), Month(Now), 1), "yyyy-mm-dd")
+        End If
+        
         Set Recordset = New ADODB.Recordset
         SQL = "SELECT * FROM comidas WHERE idempleado = " & idEmpleado & " "
         SQL = SQL & "AND fecha BETWEEN '" & desde & "' AND '" & hasta & "' "
@@ -611,8 +658,6 @@ Sub CargarMenu()
         SQL = SQL & "AND (nombre LIKE '%" & txtBuscar.Text & "%' OR codigo LIKE '" & txtBuscar.Text & "%') "
     End If
     SQL = SQL & "ORDER BY nombre"
-    Clipboard.Clear
-    Clipboard.SetText SQL
     Recordset.Open SQL, Data, adOpenKeyset, adLockOptimistic
     
     If Not Recordset.BOF And Not Recordset.EOF Then

@@ -1,7 +1,7 @@
 VERSION 5.00
-Begin VB.Form Tipos 
+Begin VB.Form Empresa 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "Tipos"
+   Caption         =   "Empresa"
    ClientHeight    =   1695
    ClientLeft      =   45
    ClientTop       =   330
@@ -21,32 +21,6 @@ Begin VB.Form Tipos
    MinButton       =   0   'False
    ScaleHeight     =   1695
    ScaleWidth      =   10815
-   Begin VB.TextBox TxtBeneficio 
-      BackColor       =   &H00FFFFFF&
-      BeginProperty DataFormat 
-         Type            =   1
-         Format          =   """$"" #.##0,00"
-         HaveTrueFalseNull=   0
-         FirstDayOfWeek  =   0
-         FirstWeekOfYear =   0
-         LCID            =   11274
-         SubFormatType   =   2
-      EndProperty
-      BeginProperty Font 
-         Name            =   "Lucida Sans Unicode"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   345
-      Left            =   120
-      TabIndex        =   4
-      Top             =   960
-      Width           =   2535
-   End
    Begin VB.TextBox txtCodigo 
       BackColor       =   &H00FFFFFF&
       BeginProperty DataFormat 
@@ -86,9 +60,9 @@ Begin VB.Form Tipos
       EndProperty
       Height          =   615
       Left            =   9720
-      Picture         =   "Tipos.frx":0000
+      Picture         =   "Empresa.frx":0000
       Style           =   1  'Graphical
-      TabIndex        =   6
+      TabIndex        =   5
       ToolTipText     =   " Salir "
       Top             =   840
       Width           =   855
@@ -132,29 +106,12 @@ Begin VB.Form Tipos
       EndProperty
       Height          =   615
       Left            =   8760
-      Picture         =   "Tipos.frx":058A
+      Picture         =   "Empresa.frx":058A
       Style           =   1  'Graphical
-      TabIndex        =   5
+      TabIndex        =   4
       ToolTipText     =   " Guardar"
       Top             =   840
       Width           =   855
-   End
-   Begin VB.Label Label1 
-      Caption         =   "Beneficio"
-      BeginProperty Font 
-         Name            =   "Lucida Sans Unicode"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   255
-      Left            =   120
-      TabIndex        =   7
-      Top             =   720
-      Width           =   1335
    End
    Begin VB.Label Label13 
       Caption         =   "Codigo"
@@ -191,7 +148,7 @@ Begin VB.Form Tipos
       Width           =   1095
    End
 End
-Attribute VB_Name = "Tipos"
+Attribute VB_Name = "Empresa"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -213,19 +170,15 @@ Private Sub cmdGuardar_Click()
         Exit Sub
     End If
     
-    If TxtBeneficio.Text = "" Then
-        TxtBeneficio.Text = "0,00"
-    End If
-    
     Set rsGuardar = New ADODB.Recordset
-    SQL = "SELECT * FROM Tipos WHERE id = " & id
+    SQL = "SELECT * FROM empresas WHERE id = " & id
     rsGuardar.Open SQL, Data, adOpenKeyset, adLockOptimistic
     
     If Nuevo Then
         
-        'Verificar que no se carguen dos Tipos con el mismo código
+        'Verificar que no se carguen dos Empresa con el mismo c digo
         Set rsValidar = New ADODB.Recordset
-        SQL = "SELECT id from Tipos WHERE codigo = '" & txtCodigo.Text & "' LIMIT 1"
+        SQL = "SELECT id from empresas WHERE codigo = '" & txtCodigo.Text & "' LIMIT 1"
         rsValidar.Open SQL, Data, adOpenKeyset, adLockOptimistic
         If Not rsValidar.BOF And Not rsValidar.EOF Then
             Call MsgBox("CODIGO EN USO", vbExclamation, App.Title)
@@ -240,8 +193,6 @@ Private Sub cmdGuardar_Click()
     
     rsGuardar!codigo = UCase(txtCodigo.Text)
     rsGuardar!nombre = txtNombre.Text
-    rsGuardar!beneficio = TxtBeneficio.Text
-    rsGuardar!eliminado = 0
     rsGuardar.Update
     rsGuardar.Close
     Unload Me
@@ -262,19 +213,8 @@ End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     
-    TipoList.Show
+    EmpresaList.Show
     
-End Sub
-
-Private Sub TxtBeneficio_KeyPress(KeyAscii As Integer)
-
-    If KeyAscii = 13 Then
-        PasarFoco
-        KeyAscii = 0
-    Else
-        SoloEnteros txtCodigo, KeyAscii
-    End If
-
 End Sub
 
 Private Sub txtCodigo_KeyPress(KeyAscii As Integer)
@@ -296,3 +236,4 @@ Private Sub txtNombre_KeyPress(KeyAscii As Integer)
     End If
     
 End Sub
+

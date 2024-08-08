@@ -157,7 +157,7 @@ Dim inicio As Boolean
 
 Private Sub Zeta(blanco As Boolean)
 
-    Dim fechadesde As Date
+    Dim fechaDesde As Date
     Dim Cantidad As Double
     Dim total As Double
     
@@ -175,7 +175,7 @@ Private Sub Zeta(blanco As Boolean)
     rsconsulta.Open SQL, Data, adOpenKeyset, adLockOptimistic
     
     If rsconsulta.EOF And rsconsulta.BOF Then
-        fechadesde = "06-04-2020 00:00:00"
+        fechaDesde = "06-04-2020 00:00:00"
         Set rsZeta = New ADODB.Recordset
         If blanco Then
             SQL = "SELECT id, precio FROM comidas WHERE idempleado <> 9999"
@@ -184,12 +184,12 @@ Private Sub Zeta(blanco As Boolean)
         End If
         rsZeta.Open SQL, Data, adOpenKeyset, adLockOptimistic
     Else
-        fechadesde = rsconsulta!fecha
+        fechaDesde = rsconsulta!fecha
         Set rsZeta = New ADODB.Recordset
         If blanco Then
-            SQL = "SELECT id FROM comidas WHERE idempleado <> 9999 AND fecha > '" & Format(fechadesde, "yyyy-mm-dd hh:mm:ss") & "' "
+            SQL = "SELECT id FROM comidas WHERE idempleado <> 9999 AND fecha > '" & Format(fechaDesde, "yyyy-mm-dd hh:mm:ss") & "' "
         Else
-            SQL = "SELECT id FROM comidas WHERE idempleado = 9999 AND fecha > '" & Format(fechadesde, "yyyy-mm-dd hh:mm:ss") & "' "
+            SQL = "SELECT id FROM comidas WHERE idempleado = 9999 AND fecha > '" & Format(fechaDesde, "yyyy-mm-dd hh:mm:ss") & "' "
         End If
         rsZeta.Open SQL, Data, adOpenKeyset, adLockOptimistic
     End If
@@ -212,7 +212,7 @@ Private Sub Zeta(blanco As Boolean)
     rsZeta.Close
     rsconsulta.Close
     
-    imprimeZeta fechadesde, Cantidad, total
+    imprimeZeta fechaDesde, Cantidad, total
 
 End Sub
 
@@ -425,7 +425,7 @@ Public Sub txtDocumento_KeyPress(KeyAscii As Integer)
         End If
         
         Set rsconsulta = New ADODB.Recordset
-        SQL = "SELECT * FROM empleados WHERE numerodocumento =" & txtDocumento.Text
+        SQL = "SELECT * FROM empleados WHERE numerodocumento =" & txtDocumento.Text & " AND eliminado = 0 "
         rsconsulta.Open SQL, Data, adOpenKeyset, adLockOptimistic
         
         If rsconsulta.BOF And rsconsulta.EOF Then
@@ -469,6 +469,7 @@ Sub backup()
     End If
 
     inicio = True
+        
 
 End Sub
 

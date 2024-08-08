@@ -420,7 +420,7 @@ Public Function Exportar_Excel(sOutputPath As String, Optional desde As Date, Op
     
 End Function
 
-Public Function Exportar_Excel_Totales(sOutputPath As String, Optional desde As Date, Optional hasta As Date) As Boolean
+Public Function Exportar_Excel_Totales(sOutputPath As String, Optional desde As Date, Optional hasta As Date, Optional idTipo As Integer, Optional idEmpresa As Integer) As Boolean
     
     Dim o_Excel     As Object
     Dim o_Libro     As Object
@@ -445,11 +445,19 @@ Public Function Exportar_Excel_Totales(sOutputPath As String, Optional desde As 
     'rsconsulta.Open SQL, Data, adOpenKeyset, adLockOptimistic
     
     Set rsconsulta = New ADODB.Recordset
-    SQL = "SELECT c.id, p.id, p.nombre empleado, p.nrolegajo nrodoc, c.fecha, sum(c.precio) PRECIO, p.idtipo FROM comidas as c "
+    SQL = "SELECT c.id, p.id, p.nombre empleado, p.nrolegajo nrodoc, c.fecha, sum(c.precio) PRECIO, p.idtipo, t.beneficio FROM comidas as c "
     SQL = SQL & "INNER JOIN empleados as p ON p.id = c.idempleado "
+    SQL = SQL & "INNER JOIN tipos as t ON p.idtipo = t.id "
+    If (idTipo <> 0) Then
+        SQL = SQL & "AND p.idtipo = " & idTipo & " "
+    End If
+    If (idEmpresa <> 0) Then
+        SQL = SQL & "AND p.idempresa = " & idEmpresa & " "
+    End If
     SQL = SQL & "AND date(c.fecha) BETWEEN '" & Format(desde, "yyyy-MM-dd") & "' AND '" & Format(hasta, "yyyy-MM-dd") & "'"
     SQL = SQL & "GROUP BY p.id ORDER BY p.nrolegajo, c.fecha"
     rsconsulta.Open SQL, Data, adOpenKeyset, adLockOptimistic
+    
     
     o_Hoja.Name = Left(Replace(Replace("Detalle de Comidas", "*", ""), "/", " "), 30)
     
@@ -474,6 +482,7 @@ Public Function Exportar_Excel_Totales(sOutputPath As String, Optional desde As 
     o_Hoja.Cells(Fila, 8).Value = "Importe"
     o_Hoja.Cells(Fila, 9).Value = "Beneficio"
     o_Hoja.Cells(Fila, 10).Value = "Final"
+    o_Hoja.Cells(Fila, 11).Value = "Beneficio A Facturar"
     
 
     
@@ -497,20 +506,50 @@ Public Function Exportar_Excel_Totales(sOutputPath As String, Optional desde As 
             o_Hoja.Cells(Fila, 9).Value = CDbl(0)
             o_Hoja.Cells(Fila, 10).Value = CDbl(rsconsulta!Precio)
         ElseIf (rsconsulta!idTipo = 2) Then
-            o_Hoja.Cells(Fila, 9).Value = CDbl(-5000)
-            If (rsconsulta!Precio < 5000) Then
+            o_Hoja.Cells(Fila, 9).Value = "-" & CDbl(rsconsulta!beneficio)
+            If (rsconsulta!Precio < rsconsulta!beneficio) Then
                 o_Hoja.Cells(Fila, 10).Value = CDbl(0)
             Else
-                o_Hoja.Cells(Fila, 10).Value = CDbl(rsconsulta!Precio) - CDbl(5000)
+                o_Hoja.Cells(Fila, 10).Value = CDbl(rsconsulta!Precio) - CDbl(rsconsulta!beneficio)
             End If
         ElseIf (rsconsulta!idTipo = 3) Then
-            o_Hoja.Cells(Fila, 9).Value = CDbl(rsconsulta!Precio)
+            o_Hoja.Cells(Fila, 9).Value = "-" & CDbl(rsconsulta!Precio)
             o_Hoja.Cells(Fila, 10).Value = CDbl(0)
         ElseIf (rsconsulta!idTipo = 4) Then
             o_Hoja.Cells(Fila, 9).Value = CDbl(0)
             o_Hoja.Cells(Fila, 10).Value = CDbl(rsconsulta!Precio)
+        ElseIf (rsconsulta!idTipo = 5) Then
+            o_Hoja.Cells(Fila, 9).Value = "-" & CDbl(rsconsulta!beneficio)
+            If (rsconsulta!Precio < rsconsulta!beneficio) Then
+                o_Hoja.Cells(Fila, 10).Value = CDbl(0)
+            Else
+                o_Hoja.Cells(Fila, 10).Value = CDbl(rsconsulta!Precio) - CDbl(rsconsulta!beneficio)
+            End If
+        ElseIf (rsconsulta!idTipo = 6) Then
+            o_Hoja.Cells(Fila, 9).Value = "-" & CDbl(rsconsulta!beneficio)
+            If (rsconsulta!Precio < rsconsulta!beneficio) Then
+                o_Hoja.Cells(Fila, 10).Value = CDbl(0)
+            Else
+                o_Hoja.Cells(Fila, 10).Value = CDbl(rsconsulta!Precio) - CDbl(rsconsulta!beneficio)
+            End If
+        ElseIf (rsconsulta!idTipo = 7) Then
+            o_Hoja.Cells(Fila, 9).Value = "-" & CDbl(rsconsulta!beneficio)
+            If (rsconsulta!Precio < rsconsulta!beneficio) Then
+                o_Hoja.Cells(Fila, 10).Value = CDbl(0)
+            Else
+                o_Hoja.Cells(Fila, 10).Value = CDbl(rsconsulta!Precio) - CDbl(rsconsulta!beneficio)
+            End If
         End If
-        
+        If (o_Hoja.Cells(Fila, 2).Value <> "EFECTIVO" Or o_Hoja.Cells(Fila, 2).Value <> "TRANSFERENCIA") Then
+            If CDbl((o_Hoja.Cells(Fila, 9).Value) * -1) >= CDbl(o_Hoja.Cells(Fila, 8).Value) Then
+                o_Hoja.Cells(Fila, 11).Value = CDbl(o_Hoja.Cells(Fila, 9).Value * -1)
+            Else
+                o_Hoja.Cells(Fila, 11).Value = CDbl(o_Hoja.Cells(Fila, 9).Value * -1) + CDbl(o_Hoja.Cells(Fila, 8).Value)
+            End If
+        Else
+            o_Hoja.Cells(Fila, 11).Value = CDbl(0)
+        End If
+
         Cantidad = Cantidad + 1
         Fila = Fila + 1
         zMain.pBar.Value = zMain.pBar.Value + 1
@@ -1154,6 +1193,23 @@ Public Function WindowProc(ByVal hwnd As Long, _
         Else
             ' Mueve el scroll hacia arriba
             SendMessage hwnd, WM_VSCROLL, ByVal 0, ByVal 0
+        End If
+    End If
+End Function
+
+Function Dia16Anterior(ByVal fecha As Date) As Date
+    ' Si el día de la fecha proporcionada es mayor que 16
+    ' Devuelve el día 16 del mismo mes
+    ' De lo contrario, devuelve el día 16 del mes anterior
+    If Day(fecha) > 16 Then
+        Dia16Anterior = DateSerial(Year(fecha), Month(fecha), 16)
+    Else
+        ' Si estamos en enero y el día es menor o igual a 16
+        ' Devuelve el 16 de diciembre del año anterior
+        If Month(fecha) = 1 Then
+            Dia16Anterior = DateSerial(Year(fecha) - 1, 12, 16)
+        Else
+            Dia16Anterior = DateSerial(Year(fecha), Month(fecha) - 1, 16)
         End If
     End If
 End Function

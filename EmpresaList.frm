@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{0ECD9B60-23AA-11D0-B351-00A0C9055D8E}#6.0#0"; "MSHFLXGD.OCX"
-Begin VB.Form TipoList 
-   Caption         =   "Listado de tipos de mpleados"
+Begin VB.Form EmpresaList 
+   Caption         =   "Listado de empresas"
    ClientHeight    =   5760
    ClientLeft      =   120
    ClientTop       =   405
@@ -44,7 +44,7 @@ Begin VB.Form TipoList
          EndProperty
          Height          =   615
          Left            =   0
-         Picture         =   "TipoList.frx":0000
+         Picture         =   "EmpresaList.frx":0000
          Style           =   1  'Graphical
          TabIndex        =   8
          ToolTipText     =   " Nuevo"
@@ -64,7 +64,7 @@ Begin VB.Form TipoList
          EndProperty
          Height          =   615
          Left            =   1920
-         Picture         =   "TipoList.frx":058A
+         Picture         =   "EmpresaList.frx":058A
          Style           =   1  'Graphical
          TabIndex        =   7
          ToolTipText     =   " Eliminar"
@@ -84,7 +84,7 @@ Begin VB.Form TipoList
          EndProperty
          Height          =   615
          Left            =   960
-         Picture         =   "TipoList.frx":0B14
+         Picture         =   "EmpresaList.frx":0B14
          Style           =   1  'Graphical
          TabIndex        =   6
          ToolTipText     =   " Modificar"
@@ -104,7 +104,7 @@ Begin VB.Form TipoList
          EndProperty
          Height          =   615
          Left            =   2880
-         Picture         =   "TipoList.frx":109E
+         Picture         =   "EmpresaList.frx":109E
          Style           =   1  'Graphical
          TabIndex        =   5
          ToolTipText     =   " Salir "
@@ -165,9 +165,9 @@ Begin VB.Form TipoList
             Strikethrough   =   0   'False
          EndProperty
          Height          =   360
-         ItemData        =   "TipoList.frx":1628
+         ItemData        =   "EmpresaList.frx":1628
          Left            =   120
-         List            =   "TipoList.frx":1632
+         List            =   "EmpresaList.frx":1632
          Style           =   2  'Dropdown List
          TabIndex        =   1
          Top             =   250
@@ -210,7 +210,7 @@ Begin VB.Form TipoList
       _Band(0).Cols   =   2
    End
 End
-Attribute VB_Name = "TipoList"
+Attribute VB_Name = "EmpresaList"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -230,27 +230,26 @@ Private Sub cmdModificar_Click()
         Exit Sub
     End If
     
-    Tipos.Nuevo = False
-    Tipos.id = Flex.TextMatrix(Flex.Row, 0)
+    empresa.Nuevo = False
+    empresa.id = Flex.TextMatrix(Flex.Row, 0)
     
     Set rsTipo = New ADODB.Recordset
-    SQL = "SELECT * FROM Tipos WHERE id = " & Tipos.id
+    SQL = "SELECT * FROM empresas WHERE id = " & empresa.id
     rsTipo.Open SQL, Data, adOpenKeyset, adLockOptimistic
-    Tipos.txtCodigo.Text = rsTipo!codigo
-    Tipos.txtNombre.Text = rsTipo!nombre
-    Tipos.TxtBeneficio.Text = rsTipo!beneficio
+    empresa.txtCodigo.Text = rsTipo!codigo
+    empresa.txtNombre.Text = rsTipo!nombre
     rsTipo.Close
     
     Unload Me
-    Tipos.Show
+    empresa.Show
     
 End Sub
 
 Private Sub cmdNuevo_Click()
     
-    Tipos.Nuevo = True
+    empresa.Nuevo = True
     Unload Me
-    Tipos.Show
+    empresa.Show
     
 End Sub
 
@@ -270,11 +269,10 @@ End Sub
 
 Sub ordenaFlex()
     
-    Flex.FormatString = "id|Codigo|Nombre|Beneficio"
+    Flex.FormatString = "id|Codigo|Nombre"
     Flex.ColWidth(0) = 0
     Flex.ColWidth(1) = 1400
     Flex.ColWidth(2) = 4000
-    Flex.ColWidth(3) = 2000
     
 End Sub
 
@@ -282,10 +280,10 @@ Sub Cargar()
     
     Flex.Clear
     Flex.Rows = 2
-    Flex.Cols = 4
+    Flex.Cols = 3
     
     Set Recordset = New ADODB.Recordset
-    SQL = "SELECT e.id, e.codigo, e.nombre, e.beneficio FROM Tipos as e"
+    SQL = "SELECT e.id, e.codigo, e.nombre FROM empresas as e"
     If txtBuscar.Text <> "" Then
         SQL = SQL & " AND e." & cboBuscar.Text & " LIKE '%" & txtBuscar.Text & "%'"
     End If
@@ -297,7 +295,6 @@ Sub Cargar()
             Flex.TextMatrix(Flex.Rows - 1, 0) = Recordset!id
             Flex.TextMatrix(Flex.Rows - 1, 1) = Recordset!codigo
             Flex.TextMatrix(Flex.Rows - 1, 2) = Recordset!nombre
-            Flex.TextMatrix(Flex.Rows - 1, 3) = Recordset!beneficio
             Flex.Rows = Flex.Rows + 1
             Recordset.MoveNext
         Loop

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.MDIForm zMain 
    BackColor       =   &H00FFFFFF&
    Caption         =   "SISTEMA DE VENTAS"
@@ -37,6 +37,9 @@ Begin VB.MDIForm zMain
       Begin VB.Menu mpSector 
          Caption         =   "&SECTORES"
          Visible         =   0   'False
+      End
+      Begin VB.Menu mpEmpresa 
+         Caption         =   "&EMPRESAS"
       End
       Begin VB.Menu mpl2 
          Caption         =   "-"
@@ -183,6 +186,12 @@ End Sub
 Private Sub mpEmpleados_Click()
 
     EmpleadosList.Show
+
+End Sub
+
+Private Sub mpEmpresa_Click()
+
+    EmpresaList.Show
 
 End Sub
 
