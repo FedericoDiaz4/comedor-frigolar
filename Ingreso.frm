@@ -120,14 +120,6 @@ Begin VB.Form Ingreso
       _NumberOfBands  =   1
       _Band(0).Cols   =   2
    End
-   Begin VB.Image Image 
-      Height          =   2350
-      Left            =   720
-      Picture         =   "Ingreso.frx":058A
-      Stretch         =   -1  'True
-      Top             =   1440
-      Width           =   2300
-   End
    Begin VB.Label lblOpciones 
       BackStyle       =   0  'Transparent
       Caption         =   "Ingrese la opcion deseada"
@@ -146,6 +138,14 @@ Begin VB.Form Ingreso
       TabIndex        =   1
       Top             =   210
       Width           =   4095
+   End
+   Begin VB.Image Image 
+      Height          =   2600
+      Left            =   450
+      Picture         =   "Ingreso.frx":058A
+      Stretch         =   -1  'True
+      Top             =   1350
+      Width           =   3300
    End
 End
 Attribute VB_Name = "Ingreso"

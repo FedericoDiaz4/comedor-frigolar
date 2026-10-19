@@ -413,7 +413,7 @@ Private Sub imprimeTicket()
     Printer.FontName = "Consolas"
     Printer.FontBold = True
     Printer.FontSize = 16
-    Printer.Print Centrar("Bs As Cheff", 11)
+    Printer.Print Centrar("Del Tuyu Catering", 5)
     
     Set rsTicket = New ADODB.Recordset
     SQL = "SELECT date(t.fecha) fecha, time(t.fecha) hora, t.precio FROM comidas as t WHERE id = " & id

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.MDIForm zMain 
    BackColor       =   &H00FFFFFF&
    Caption         =   "SISTEMA DE VENTAS"
@@ -108,6 +108,9 @@ Begin VB.MDIForm zMain
       Begin VB.Menu miInformeTotalesXDNI 
          Caption         =   "INFORME TOTALES X DNI"
       End
+      Begin VB.Menu miInformeTotalesXPersona 
+         Caption         =   "INFORME TOTALES X PERSONA"
+      End
    End
    Begin VB.Menu mListados 
       Caption         =   "LISTADOS"
@@ -162,6 +165,12 @@ Private Sub miInformeTotalesXDNI_Click()
 
     informeTotalesXDNI.Show
     
+End Sub
+
+Private Sub miInformeTotalesXPersona_Click()
+
+    informeDetalleXPersona.Show
+
 End Sub
 
 Private Sub miInformeTXT_Click()

@@ -251,25 +251,41 @@ Private Sub cmdModificar_Click()
     Empleados.Nuevo = False
     Empleados.id = Flex.TextMatrix(Flex.Row, 0)
     
-    Set Rscliente = New ADODB.Recordset
+    Set rsCliente = New ADODB.Recordset
     SQL = "SELECT * FROM empleados WHERE id = " & Empleados.id
-    Rscliente.Open SQL, Data, adOpenKeyset, adLockOptimistic
-    Empleados.txtNombre.Text = Rscliente!nombre
-    Empleados.txtNumero.Text = Rscliente!numerodocumento
-    Empleados.txtNroLegajo.Text = Rscliente!nrolegajo
-    Empleados.txtCuil.Text = Rscliente!Cuil
+    rsCliente.Open SQL, Data, adOpenKeyset, adLockOptimistic
+    Empleados.txtNombre.Text = rsCliente!nombre
+    Empleados.txtNumero.Text = rsCliente!numerodocumento
+    Empleados.txtNroLegajo.Text = rsCliente!nrolegajo
+    Empleados.txtCuil.Text = rsCliente!Cuil
     Dim idTipo As Integer
-    If (Rscliente!idTipo <> 0) Then
-        idTipo = Rscliente!idTipo
+    If (rsCliente!idTipo <> 0) Then
+        idTipo = rsCliente!idTipo
     End If
-    If (Rscliente!idEmpresa <> 0) Then
-        idEmpresa = Rscliente!idEmpresa
+    If (rsCliente!idEmpresa <> 0) Then
+        idEmpresa = rsCliente!idEmpresa
     End If
-    Rscliente.Close
+    rsCliente.Close
     
     Unload Me
     Empleados.Show
-    Empleados.cboTipos.Text = getData(idTipo, "nombre", "tipos")
+    'MsgBox (getData(idTipo, "nombre", "tipos"))
+    'Empleados.cboTipos.Text = getData(idTipo, "nombre", "tipos")
+    'Empleados.cboTipos.ListIndex = (idTipo)
+    
+    For i = 0 To Empleados.cboTipos.ListCount - 1
+        If Empleados.cboTipos.ItemData(i) = idTipo Then
+            Empleados.cboTipos.ListIndex = i ' Selecciona el ítem en el ComboBox
+            Exit For
+        End If
+    Next i
+    
+    For i = 0 To Empleados.CboEmpresa.ListCount - 1
+        If Empleados.CboEmpresa.ItemData(i) = idEmpresa Then
+            Empleados.CboEmpresa.ListIndex = i ' Selecciona el ítem en el ComboBox
+            Exit For
+        End If
+    Next i
     
 End Sub
 
