@@ -111,6 +111,9 @@ Begin VB.MDIForm zMain
       Begin VB.Menu miInformeTotalesXPersona 
          Caption         =   "INFORME TOTALES X PERSONA"
       End
+      Begin VB.Menu miInformeDetalleXGrupo 
+         Caption         =   "INFORME DETALLE X GRUPO"
+      End
    End
    Begin VB.Menu mListados 
       Caption         =   "LISTADOS"
@@ -170,6 +173,12 @@ End Sub
 Private Sub miInformeTotalesXPersona_Click()
 
     informeDetalleXPersona.Show
+
+End Sub
+
+Private Sub miInformeDetalleXGrupo_Click()
+
+    informeDetalleXGrupo.Show
 
 End Sub
 
